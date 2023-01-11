@@ -1,0 +1,25 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: hp-token-logback
+  namespace: 3scale-custom-policies
+data:
+  logback.xml: |-
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE xml>
+    <configuration>
+
+      <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">  
+            ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%-15.15thread] [%-30.30logger{10}] [%file:%line] [%msg%n]</pattern>
+        </encoder>
+      </appender>
+
+      <root level="info">
+        <appender-ref ref="STDOUT" />
+      </root>
+
+      <logger name="com.redhat.consulting.api" level="DEBUG"/>
+
+    </configuration>

@@ -1,0 +1,47 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: hp-token
+  namespace: 3scale-custom-policies
+  labels:
+    app: hp-token
+    app.kubernetes.io/component: hp-token
+    app.kubernetes.io/instance: hp-token
+    app.kubernetes.io/name: hp-token    
+  annotations:
+    openshift.io/generated-by: OpenShiftWebConsole
+spec:  
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: 80-tcp
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+    - name: 8088-tcp
+      protocol: TCP
+      port: 8088
+      targetPort: 8088
+    - name: 8443-tcp
+      protocol: TCP
+      port: 8443
+      targetPort: 8443
+    - name: 8778-tcp
+      protocol: TCP
+      port: 8778
+      targetPort: 8778
+    - name: 9779-tcp
+      protocol: TCP
+      port: 9779
+      targetPort: 9779
+  internalTrafficPolicy: Cluster
+  type: ClusterIP
+  ipFamilyPolicy: SingleStack
+  sessionAffinity: None
+  selector:
+    app: hp-token
+    deploymentconfig: hp-token

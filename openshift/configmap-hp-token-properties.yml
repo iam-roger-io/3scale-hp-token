@@ -1,0 +1,9 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: hp-token-properties
+  namespace: 3scale-custom-policies
+data:
+  application.properties: |-
+
+    logging.config = /deployments/logback.xml

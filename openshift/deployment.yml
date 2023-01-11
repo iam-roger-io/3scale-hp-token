@@ -1,0 +1,98 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    alpha.image.policy.openshift.io/resolve-names: '*'
+  name: hp-token
+  namespace: 3scale-custom-policies
+  labels:
+    app: hp-token
+    app.kubernetes.io/component: hp-token
+    app.kubernetes.io/instance: hp-token
+    app.kubernetes.io/name: hp-token
+    app.openshift.io/runtime-namespace: 3scale-custom-policies
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hp-token
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: hp-token
+        deploymentconfig: hp-token
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+    spec:
+      volumes:
+        - name: hp-token-logback
+          configMap:
+            name: hp-token-logback
+            defaultMode: 420
+        - name: hp-token-properties
+          configMap:
+            name: hp-token-properties
+            defaultMode: 420
+      containers:
+        - resources: {}
+          terminationMessagePath: /dev/termination-log
+          name: hp-token
+          env:
+            - name: TOKEN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: hp-token
+                  key: TOKEN_USERNAME
+            - name: TOKEN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hp-token
+                  key: TOKEN_PASSORD
+            - name: TOKEN_URL
+              valueFrom:
+                secretKeyRef:
+                  name: hp-token
+                  key: TOKEN_URL
+            - name: TOKEN_TENANT_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: hp-token
+                  key: TOKEN_TENANT_NAME                  
+          ports:
+            - containerPort: 80
+              protocol: TCP
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8088
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
+            - containerPort: 8778
+              protocol: TCP
+            - containerPort: 9779
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: hp-token-logback
+              mountPath: /deployments/logback.xml
+              subPath: logback.xml
+            - name: hp-token-properties
+              mountPath: /deployments/application.properties
+              subPath: application.properties
+          terminationMessagePolicy: File
+          image: >-
+            quay.apps.mgmt.telcostack.br.telefonica.com/redhat/3scale-hp-token:1.0.0
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+
