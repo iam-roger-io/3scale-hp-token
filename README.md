@@ -26,9 +26,9 @@ mvn clean install
 Below are the steps to generate the image using podman.
 
 ```
-podman build -t quay.apps.mgmt.telcostack.br.telefonica.com/redhat/3scale-hp-token:<TAG> .
+podman build -t <IMAGE REGISTRY REPOSITORY>/3scale-hp-token:<TAG> .
 
-podman push quay.apps.mgmt.telcostack.br.telefonica.com/redhat/3scale-hp-token:<TAG> --tls-verify=false
+podman push <IMAGE REGISTRY REPOSITORY>/3scale-hp-token:<TAG> --tls-verify=false
 ```
 
 > NOTE: In addition to the Quay credential, you will need to login to the registry
